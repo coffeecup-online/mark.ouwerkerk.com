@@ -1,0 +1,85 @@
+---
+import Header from '../components/Header.astro';
+import { personal } from '../data/cv';
+import '../styles/global.css';
+---
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Neem contact op met Mark Ouwerkerk. Stuur een bericht via het contactformulier of neem rechtstreeks contact op via e-mail, telefoon of LinkedIn." />
+    <meta name="theme-color" content="#FAF2E6" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Contact — Mark Ouwerkerk</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Ga naar de inhoud</a>
+    <Header />
+    <main id="main" class="container contact-page">
+      <div class="contact-page-intro">
+        <p class="eyebrow">Contact</p>
+        <h1>Laten we kennismaken<span>.</span></h1>
+        <p>Een vraag of gewoon eens van gedachten wisselen? Stuur me gerust een bericht.</p>
+        <address>
+          <a href={`mailto:${personal.email}`}>{personal.email} <span aria-hidden="true">↗</span></a>
+          <a href={`tel:${personal.phoneHref}`}>{personal.phone}</a>
+          <a href={personal.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span><span class="sr-only"> (opent in een nieuw tabblad)</span></a>
+          <p>{personal.location}, Nederland</p>
+        </address>
+      </div>
+      <div class="form-panel">
+        <h2>Stuur een bericht</h2>
+        <p class="form-intro">Vul hieronder je naam, e-mailadres en bericht in. Alle velden zijn verplicht.</p>
+        <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="37dc01bc-72e1-4f56-b5ea-99e3d40bbffc" />
+          <input type="hidden" name="subject" value="Nieuw bericht via de website van Mark Ouwerkerk" />
+          <input type="hidden" name="from_name" value="Website Mark Ouwerkerk" />
+          <input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" aria-hidden="true" />
+          <div class="form-field"><label for="name">Naam</label><input id="name" name="name" type="text" autocomplete="name" required maxlength="120" /></div>
+          <div class="form-field"><label for="email">E-mailadres</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254" /></div>
+          <div class="form-field"><label for="message">Bericht</label><textarea id="message" name="message" rows="7" required maxlength="10000"></textarea></div>
+          <p class="form-privacy">Je bericht wordt via Web3Forms verstuurd naar Mark. Gebruik je liever e-mail? Mail naar <a href={`mailto:${personal.email}`}>{personal.email}</a>.</p>
+          <button class="button" type="submit">Verstuur bericht <span aria-hidden="true">↗</span></button>
+          <p id="form-status" class="form-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+      </div>
+    </main>
+    <footer class="container footer"><p>© {new Date().getFullYear()} Mark Ouwerkerk</p><a href="/">Terug naar home <span aria-hidden="true">↗</span></a></footer>
+    <script>
+      const form = document.querySelector<HTMLFormElement>('#contact-form');
+      const status = document.querySelector<HTMLParagraphElement>('#form-status');
+      const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (form && status && button) {
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          if (button.disabled) return;
+          button.disabled = true;
+          form.setAttribute('aria-busy', 'true');
+          status.dataset.state = 'pending';
+          status.textContent = 'Je bericht wordt verstuurd…';
+          try {
+            const response = await fetch(form.action, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify(Object.fromEntries(new FormData(form))),
+              signal: AbortSignal.timeout(20000),
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) throw new Error('Submission failed');
+            status.dataset.state = 'success';
+            status.textContent = 'Bedankt! Je bericht is verstuurd naar Mark.';
+            form.reset();
+          } catch {
+            status.dataset.state = 'error';
+            status.textContent = 'Versturen is niet gelukt. Probeer het opnieuw of mail naar mark@ouwerkerk.com. Je ingevulde bericht is bewaard.';
+          } finally {
+            button.disabled = false;
+            form.removeAttribute('aria-busy');
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
+

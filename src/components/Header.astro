@@ -1,0 +1,14 @@
+---
+import { navigation } from '../data/cv';
+const isHome = Astro.url.pathname === '/';
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="wordmark" href="/" aria-label="Mark Ouwerkerk — home"><span class="wordmark-line"><span>M</span>ark</span><span class="wordmark-line"><span>O</span>uwerkerk</span></a>
+    <nav aria-label="Hoofdnavigatie">
+      <ul>{navigation.map(item => <li><a class:list={{ 'nav-contact': item.href === '/contact/' }} href={item.href.startsWith('#') && !isHome ? `/${item.href}` : item.href} aria-current={item.href === '/contact/' && !isHome ? 'page' : undefined}>{item.label}</a></li>)}</ul>
+    </nav>
+  </div>
+</header>
+
+
