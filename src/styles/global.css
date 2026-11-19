@@ -35,7 +35,6 @@ nav a:hover,.text-link:hover,.footer a:hover{color:var(--secondary)}
 .hero-bottom a span{margin-left:20px}
 .section-layout{display:grid;grid-template-columns:1fr 1.65fr;gap:80px}
 .section-space{padding-block:90px}
-.section-heading .eyebrow{margin-bottom:19px}
 .section-heading h2{font-size:35px;line-height:1.2;letter-spacing:-1.2px;font-weight:500;margin-bottom:20px}
 .section-intro{color:var(--muted);font-size:14px;max-width:260px}
 .timeline{border-left:1px solid var(--line);padding-left:30px}
@@ -118,7 +117,6 @@ nav a{font-size:11px;white-space:nowrap}
 .hero-bottom a span{margin-left:5px}
 .section-layout{grid-template-columns:1fr;gap:25px}
 .section-space{padding-block:55px}
-.section-heading .eyebrow{font-size:10px;margin-bottom:12px}
 .section-heading h2{font-size:30px;margin-bottom:13px}
 .section-intro{max-width:100%;margin-bottom:4px}
 .timeline{padding-left:23px;margin-left:5px}
@@ -226,4 +224,5 @@ button:disabled{opacity:.65;cursor:wait;transform:none}
 @media(max-width:1050px){.cv-section>.timeline{margin-left:calc((100% - 45px)/2.7 + 45px)}}
 @media(max-width:720px){.cv-section>.timeline{margin-left:5px}.cv-section-header{gap:16px}.cv-download{gap:10px;padding:13px}.cv-section-header .section-intro{max-width:240px}}
 @media(max-width:400px){.cv-section-header{flex-wrap:wrap}.cv-download{margin-left:auto}}
+
 
